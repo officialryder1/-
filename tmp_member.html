@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="text-scale" content="scale" />
+		
+		<style data-sveltekit>/*! tailwindcss v4.3.3 | MIT License | https://tailwindcss.com */
+@layer properties;
+@layer theme, base, components, utilities;
+@layer theme {
+  :root, :host {
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+      "Noto Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+      "Segoe UI Symbol", "Noto Color Emoji";
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+      "Courier New", monospace;
+    --default-transition-duration: 150ms;
+    --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    --default-font-family: var(--font-sans);
+    --default-mono-font-family: var(--font-mono);
+  }
+}
+@layer base {
+  *, ::after, ::before, ::backdrop, ::file-selector-button {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+  }
+  html, :host {
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    tab-size: 4;
+    font-family: var(--default-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
+    font-feature-settings: var(--default-font-feature-settings, normal);
+    font-variation-settings: var(--default-font-variation-settings, normal);
+    -webkit-tap-highlight-color: transparent;
+  }
+  hr {
+    height: 0;
+    color: inherit;
+    border-top-width: 1px;
+  }
+  abbr:where([title]) {
+    -webkit-text-decoration: underline dotted;
+    text-decoration: underline dotted;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+  a {
+    color: inherit;
+    -webkit-text-decoration: inherit;
+    text-decoration: inherit;
+  }
+  b, strong {
+    font-weight: bolder;
+  }
+  code, kbd, samp, pre {
+    font-family: var(--default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
+    font-feature-settings: var(--default-mono-font-feature-settings, normal);
+    font-variation-settings: var(--default-mono-font-variation-settings, normal);
+    font-size: 1em;
+  }
+  small {
+    font-size: 80%;
+  }
+  sub, sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+  sub {
+    bottom: -0.25em;
+  }
+  sup {
+    top: -0.5em;
+  }
+  table {
+    text-indent: 0;
+    border-color: inherit;
+    border-collapse: collapse;
+  }
+  :-moz-focusring:where(:not(iframe)) {
+    outline: auto;
+  }
+  progress {
+    vertical-align: baseline;
+  }
+  summary {
+    display: list-item;
+  }
+  ol, ul, menu {
+    list-style: none;
+  }
+  img, svg, video, canvas, audio, iframe, embed, object {
+    display: block;
+    vertical-align: middle;
+  }
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+  button, input, select, optgroup, textarea, ::file-selector-button {
+    font: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    border-radius: 0;
+    background-color: transparent;
+    opacity: 1;
+  }
+  :where(select:is([multiple], [size])) optgroup {
+    font-weight: bolder;
+  }
+  :where(select:is([multiple], [size])) optgroup option {
+    padding-inline-start: 20px;
+  }
+  ::file-selector-button {
+    margin-inline-end: 4px;
+  }
+  ::placeholder {
+    opacity: 1;
+  }
+  @supports (not (-webkit-appearance: -apple-pay-button))  or (contain-intrinsic-size: 1px) {
+    ::placeholder {
+      color: currentcolor;
+      @supports (color: color-mix(in lab, red, red)) {
+        color: color-mix(in oklab, currentcolor 50%, transparent);
+      }
+    }
+  }
+  textarea {
+    resize: vertical;
+  }
+  ::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+  ::-webkit-date-and-time-value {
+    min-height: 1lh;
+    text-align: inherit;
+  }
+  ::-webkit-datetime-edit {
+    display: inline-flex;
+  }
+  ::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+  }
+  ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month-field, ::-webkit-datetime-edit-day-field, ::-webkit-datetime-edit-hour-field, ::-webkit-datetime-edit-minute-field, ::-webkit-datetime-edit-second-field, ::-webkit-datetime-edit-millisecond-field, ::-webkit-datetime-edit-meridiem-field {
+    padding-block: 0;
+  }
+  ::-webkit-calendar-picker-indicator {
+    line-height: 1;
+  }
+  :-moz-ui-invalid {
+    box-shadow: none;
+  }
+  button, input:where([type="button"], [type="reset"], [type="submit"]), ::file-selector-button {
+    appearance: button;
+  }
+  ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {
+    height: auto;
+  }
+  [hidden]:where(:not([hidden="until-found"])) {
+    display: none !important;
+  }
+}
+@layer utilities {
+  .visible {
+    visibility: visible;
+  }
+  .static {
+    position: static;
+  }
+  .block {
+    display: block;
+  }
+  .contents {
+    display: contents;
+  }
+  .flex {
+    display: flex;
+  }
+  .table {
+    display: table;
+  }
+  .w-full {
+    width: 100%;
+  }
+  .border-collapse {
+    border-collapse: collapse;
+  }
+  .resize {
+    resize: both;
+  }
+  .border {
+    border-style: var(--tw-border-style);
+    border-width: 1px;
+  }
+  .underline {
+    text-decoration-line: underline;
+  }
+  .outline {
+    outline-style: var(--tw-outline-style);
+    outline-width: 1px;
+  }
+  .transition {
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter, display, content-visibility, overlay, pointer-events;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
+}
+@property --tw-border-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
+@property --tw-outline-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
+@layer properties {
+  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+    *, ::before, ::after, ::backdrop {
+      --tw-border-style: solid;
+      --tw-outline-style: solid;
+    }
+  }
+}
+
+
+	.app-layout.svelte-5olvqe {
+		display: flex;
+		min-height: 100vh;
+		background: #15202b;
+		color: #e7e7e7;
+	}
+
+	.sidebar.svelte-5olvqe {
+		width: 240px;
+		background: #1e2430;
+		border-right: 1px solid #334155;
+		display: flex;
+		flex-direction: column;
+		min-height: 100vh;
+	}
+
+	.sidebar-header.svelte-5olvqe {
+		padding: 1.5rem;
+		border-bottom: 1px solid #334155;
+	}
+
+	.logo.svelte-5olvqe {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		font-size: 1.25rem;
+		font-weight: 700;
+		color: #ff6a33;
+	}
+
+	.nav.svelte-5olvqe {
+		flex: 1;
+		padding: 1rem 0;
+	}
+
+	.nav-item.svelte-5olvqe {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.75rem 1.25rem;
+		color: #a0a4b8;
+		text-decoration: none;
+		font-size: 0.875rem;
+		font-weight: 500;
+		transition: all 0.2s;
+		border-radius: 4px;
+		margin: 0 0.5rem;
+	}
+
+	.nav-item.svelte-5olvqe:hover {
+		color: #e7e7e7;
+		background: #334155;
+	}
+
+	.nav-item.active.svelte-5olvqe {
+		color: #e7e7e7;
+		background: rgba(255, 106, 51, 0.15);
+		border-left: 3px solid #ff6a33;
+	}
+
+	.nav-icon.svelte-5olvqe {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.sidebar-footer.svelte-5olvqe {
+		padding: 1rem;
+		border-top: 1px solid #334155;
+	}
+
+	.logout-btn.svelte-5olvqe {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.625rem 1.25rem;
+		background: transparent;
+		color: #a0a4b8;
+		border: 1px solid #334155;
+		border-radius: 6px;
+		font-size: 0.875rem;
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+
+	.logout-btn.svelte-5olvqe:hover {
+		color: #e7e7e7;
+		background: #334155;
+	}
+
+	.main-content.svelte-5olvqe {
+		flex: 1;
+		overflow-x: hidden;
+	}
+
+	.top-header.svelte-5olvqe {
+		display: none;
+		align-items: center;
+		gap: 1rem;
+		padding: 1rem 1.5rem;
+		border-bottom: 1px solid #334155;
+		background: #1e2430;
+	}
+
+	.mobile-menu-btn.svelte-5olvqe {
+		display: none;
+		background: transparent;
+		border: none;
+		color: #a0a4b8;
+		cursor: pointer;
+		padding: 0.5rem;
+	}
+
+	.page-title.svelte-5olvqe {
+		font-size: 1.125rem;
+		font-weight: 600;
+		color: #e7e7e7;
+		margin: 0;
+	}
+
+	.content.svelte-5olvqe {
+		padding: 1.75rem;
+	}
+
+	@media (max-width: 768px) {
+		.top-header.svelte-5olvqe {
+			display: flex;
+		}
+		.mobile-menu-btn.svelte-5olvqe {
+			display: block;
+		}
+		.sidebar.svelte-5olvqe {
+			position: fixed;
+			left: -240px;
+			top: 0;
+			height: 100vh;
+			transition: left 0.3s;
+		}
+		/* (unused) .sidebar.open {
+			left: 0;
+		}*/
+		.main-content.svelte-5olvqe {
+			margin-left: 0;
+		}
+	}
+ .svelte-5olvqe{}</style>
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!--[0--><!--[--><!--[0--><!---->// src/lib/components/RoleLayout.svelte <div class="app-layout svelte-5olvqe"><aside class="sidebar svelte-5olvqe"><div class="sidebar-header svelte-5olvqe"><div class="logo svelte-5olvqe"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lucide-icon lucide lucide-bot"><!--[--><!----><path d="M12 8V4H8"><!----></path><!----><!----><rect width="16" height="12" x="4" y="8" rx="2"><!----></rect><!----><!----><path d="M2 14h2"><!----></path><!----><!----><path d="M20 14h2"><!----></path><!----><!----><path d="M15 13v2"><!----></path><!----><!----><path d="M9 13v2"><!----></path><!----><!--]--><!--[--><!--[--><!--]--><!--]--></svg><!----><!----> <span class="svelte-5olvqe">Gym House</span></div></div> <nav class="nav svelte-5olvqe"><!--[--><a href="/member" class="nav-item svelte-5olvqe active"><span class="nav-icon svelte-5olvqe"><!--[--><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lucide-icon lucide lucide-layout-dashboard"><!--[--><!----><rect width="7" height="9" x="3" y="3" rx="1"><!----></rect><!----><!----><rect width="7" height="5" x="14" y="3" rx="1"><!----></rect><!----><!----><rect width="7" height="9" x="14" y="12" rx="1"><!----></rect><!----><!----><rect width="7" height="5" x="3" y="16" rx="1"><!----></rect><!----><!--]--><!--[--><!--[--><!--]--><!--]--></svg><!----><!--]--></span> Dashboard</a><a href="/member/qr" class="nav-item svelte-5olvqe"><span class="nav-icon svelte-5olvqe"><!--[--><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lucide-icon lucide lucide-qr-code"><!--[--><!----><rect width="5" height="5" x="3" y="3" rx="1"><!----></rect><!----><!----><rect width="5" height="5" x="16" y="3" rx="1"><!----></rect><!----><!----><rect width="5" height="5" x="3" y="16" rx="1"><!----></rect><!----><!----><path d="M21 16h-3a2 2 0 0 0-2 2v3"><!----></path><!----><!----><path d="M21 21v.01"><!----></path><!----><!----><path d="M12 7v3a2 2 0 0 1-2 2H7"><!----></path><!----><!----><path d="M3 12h.01"><!----></path><!----><!----><path d="M12 3h.01"><!----></path><!----><!----><path d="M12 16v.01"><!----></path><!----><!----><path d="M16 12h1"><!----></path><!----><!----><path d="M21 12v.01"><!----></path><!----><!----><path d="M12 21v-1"><!----></path><!----><!--]--><!--[--><!--[--><!--]--><!--]--></svg><!----><!--]--></span> My QR Pass</a><a href="/member/attendance" class="nav-item svelte-5olvqe"><span class="nav-icon svelte-5olvqe"><!--[--><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lucide-icon lucide lucide-history"><!--[--><!----><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"><!----></path><!----><!----><path d="M3 3v5h5"><!----></path><!----><!----><path d="M12 7v5l4 2"><!----></path><!----><!--]--><!--[--><!--[--><!--]--><!--]--></svg><!----><!--]--></span> Attendance</a><a href="/member/shop" class="nav-item svelte-5olvqe"><span class="nav-icon svelte-5olvqe"><!--[--><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lucide-icon lucide lucide-shopping-cart"><!--[--><!----><circle cx="8" cy="21" r="1"><!----></circle><!----><!----><circle cx="19" cy="21" r="1"><!----></circle><!----><!----><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"><!----></path><!----><!--]--><!--[--><!--[--><!--]--><!--]--></svg><!----><!--]--></span> Shop</a><a href="/member/profile" class="nav-item svelte-5olvqe"><span class="nav-icon svelte-5olvqe"><!--[--><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lucide-icon lucide lucide-user"><!--[--><!----><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"><!----></path><!----><!----><circle cx="12" cy="7" r="4"><!----></circle><!----><!--]--><!--[--><!--[--><!--]--><!--]--></svg><!----><!--]--></span> Profile</a><!--]--></nav> <div class="sidebar-footer svelte-5olvqe"><button class="logout-btn svelte-5olvqe"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lucide-icon lucide lucide-log-out"><!--[--><!----><path d="m16 17 5-5-5-5"><!----></path><!----><!----><path d="M21 12H9"><!----></path><!----><!----><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"><!----></path><!----><!--]--><!--[--><!--[--><!--]--><!--]--></svg><!----><!----> <span class="svelte-5olvqe">Sign Out</span></button></div></aside> <main class="main-content svelte-5olvqe"><header class="top-header svelte-5olvqe"><button class="mobile-menu-btn svelte-5olvqe"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lucide-icon lucide lucide-menu"><!--[--><!----><path d="M4 5h16"><!----></path><!----><!----><path d="M4 12h16"><!----></path><!----><!----><path d="M4 19h16"><!----></path><!----><!--]--><!--[--><!--[--><!--]--><!--]--></svg><!----><!----></button> <h1 class="page-title svelte-5olvqe">Alice Johnson</h1></header> <div class="content svelte-5olvqe"><!--[--><!--[-1--><!--[--><!--]--><!--]--><!--]--><!----><!----></div></main></div><!----><!--]--><!--]--><!--]--><!--]--><!----> <!--[-1--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_dev = {
+						base: new URL(".", location).pathname.slice(0, -1),
+						version: "1791206123449",
+						env: {}
+					};
+
+					const element = document.currentScript.parentElement;
+
+					import("./@fs/C:/Users/HP/Documents/web development/personal project/gym-house/node_modules/@sveltejs/kit/src/runtime/client/entry.js").then(async (kit) => {
+						kit.init(__sveltekit_dev);
+						const app = await import("./@fs/C:/Users/HP/Documents/Web Development/Personal Project/gym-house/.svelte-kit/generated/dev/client/app.js");
+						kit.start(app, element, {
+							node_ids: [0, 5],
+							data: [{type:"data",data:{user:{id:"member-1",email:"alice@demogym.com",full_name:"Alice Johnson",role:"member",gym_id:"gym-house-001",membership_status:"active",subscription_expires_at:"2026-12-31T23:59:59Z"}},uses:{}},{type:"data",data:{user:{id:"member-1",email:"alice@demogym.com",full_name:"Alice Johnson",role:"member",gym_id:"gym-house-001",membership_status:"active",subscription_expires_at:"2026-12-31T23:59:59Z"},attendanceHistory:[{date:"2026-09-30",check_in:"08:45",check_out:"09:55",duration:"1h 10m"},{date:"2026-09-28",check_in:"09:15",check_out:"10:30",duration:"1h 15m"},{date:"2026-09-25",check_in:"08:30",check_out:"09:45",duration:"1h 15m"},{date:"2026-09-23",check_in:"10:00",check_out:"11:00",duration:"1h 0m"},{date:"2026-09-20",check_in:"08:50",check_out:"09:50",duration:"1h 0m"}],recentOrders:[{id:"#ORD-001",date:"2026-09-25",total:"$45.00",status:"completed"},{id:"#ORD-002",date:"2026-09-18",total:"$12.50",status:"pending"}]},uses:{}}],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

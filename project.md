@@ -1,0 +1,1 @@
+Read Gym_House_AI_Agent_Project_Brief.md completely before making changes. Follow its project goals, architecture, business rules, design direction, acceptance criteria, and phased implementation plan. Start with the repository audit and Phase 1 tasks. Do not build every feature at once; implement and verify each phase before proceeding.

@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "svelte.svelte-vscode",
+        "esbenp.api-vscode",
+        "bradlc.toml",
+        "formulahendry.auto-rename-tag",
+        "ms-azuretools.vscode-docker",
+        "github.vscode-pull-request-github"
+    ]
+}

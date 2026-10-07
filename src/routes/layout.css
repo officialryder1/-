@@ -1,0 +1,139 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/archivo';
+@import '@fontsource-variable/manrope';
+@import '@fontsource-variable/jetbrains-mono';
+
+/* ---------------------------------------------------------------------------
+   GYM HOUSE DESIGN TOKENS
+
+   One theme (dark). One accent (ember). One radius scale (sharp).
+   No pure black, no pure white, no neon glow.
+--------------------------------------------------------------------------- */
+@theme {
+	/* Surfaces: cool charcoal ramp. Never #000. */
+	--color-ink-950: #0b0e12;
+	--color-ink-900: #12161c;
+	--color-ink-850: #171c24;
+	--color-ink-800: #1d232c;
+	--color-ink-700: #2a323d;
+
+	/* Hairlines carry the structure instead of card borders. */
+	--color-line: #232a34;
+	--color-line-strong: #313a47;
+
+	/* Type ramp. Off-white, never #fff. */
+	--color-chalk: #eef1f5;
+	--color-chalk-dim: #a8b2c0;
+	--color-chalk-faint: #6c7887;
+
+	/* Single accent: ember. Saturation held under 80%. */
+	--color-ember: #e2593a;
+	--color-ember-bright: #f2704f;
+	--color-ember-deep: #a83c24;
+
+	/* Semantic. Used only for real state, never decoration. */
+	--color-go: #4ea87a;
+	--color-warn: #d9a441;
+	--color-stop: #cf5b56;
+
+	/* Type stacks (variable fonts, self-hosted) */
+	--font-display: 'Archivo Variable', 'Archivo', system-ui, sans-serif;
+	--font-sans: 'Manrope Variable', 'Manrope', system-ui, sans-serif;
+	--font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
+
+	/* One radius scale: sharp. */
+	--radius-none: 0px;
+	--radius-hair: 2px;
+}
+
+@layer base {
+	html {
+		-webkit-text-size-adjust: 100%;
+	}
+
+	html,
+	body {
+		min-height: 100%;
+	}
+
+	body {
+		margin: 0;
+		font-family: var(--font-sans);
+		background-color: var(--color-ink-950);
+		color: var(--color-chalk);
+		font-synthesis-weight: none;
+		-webkit-font-smoothing: antialiased;
+		text-rendering: optimizeLegibility;
+	}
+
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+	}
+
+	/* Display type is tight and unapologetic. */
+	h1,
+	h2,
+	h3 {
+		font-family: var(--font-display);
+		font-weight: 600;
+		letter-spacing: -0.022em;
+		line-height: 1.06;
+		margin: 0;
+	}
+
+	/* Metrics and identifiers always monospaced, always tabular. */
+	.tnum {
+		font-family: var(--font-mono);
+		font-variant-numeric: tabular-nums;
+		font-feature-settings: 'tnum' 1;
+	}
+
+	::selection {
+		background: var(--color-ember);
+		color: var(--color-ink-950);
+	}
+
+	:focus-visible {
+		outline: 2px solid var(--color-ember);
+		outline-offset: 2px;
+	}
+
+	/* Inputs inherit the theme rather than the UA stylesheet. */
+	input,
+	button,
+	select,
+	textarea {
+		font: inherit;
+		color: inherit;
+	}
+}
+
+@layer components {
+	/* A hairline rule that reads as structure, not decoration. */
+	.rule {
+		border-color: var(--color-line);
+	}
+
+	/* The single label style. Used sparingly (see eyebrow budget). */
+	.label {
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--color-chalk-faint);
+	}
+}
+
+/* Motion is restrained and always optional. */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
