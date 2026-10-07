@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tick } from 'svelte';
 	import type { PageData } from './$types';
 	import { browser } from '$app/env';
 	import jsQR from 'jsqr';
@@ -86,32 +87,102 @@
 			const devices = await navigator.mediaDevices.enumerateDevices();
 			const hasRearCamera = devices.some((d) => d.kind === 'videoinput' && /back|rear|environment/i.test(d.label || ''));
 
-			const constraints = hasRearCamera
-				? {
-					video: {
-						facingMode: { ideal: 'environment' },
-						width: { ideal: 1280 },
-						height: { ideal: 720 }
-					},
-					audio: false
-				}
-				: { video: true, audio: false };
+			const cameraAttempts = hasRearCamera
+				? [
+						{
+							video: {
+								facingMode: { ideal: 'environment' },
+								width: { ideal: 1280 },
+								height: { ideal: 720 }
+							},
+							audio: false
+						},
+						{
+							video: { facingMode: { ideal: 'user' } },
+							audio: false
+						},
+						{ video: true, audio: false }
+					]
+				: [
+						{ video: { facingMode: { ideal: 'user' } }, audio: false },
+						{ video: true, audio: false }
+					];
 
-			stream = await navigator.mediaDevices.getUserMedia(constraints);
-			cameraMode = hasRearCamera ? 'environment' : 'user';
-			cameraOpen = true;
-			if (videoRef) {
-				videoRef.srcObject = stream;
-				videoRef.muted = true;
-				videoRef.playsInline = true;
-				await videoRef.play();
+			let lastError: unknown = null;
+			for (const constraints of cameraAttempts) {
+				try {
+					stream = await navigator.mediaDevices.getUserMedia(constraints as MediaStreamConstraints);
+					cameraMode = constraints.video && typeof constraints.video === 'object' && 'facingMode' in constraints.video
+						? (constraints.video.facingMode && typeof constraints.video.facingMode === 'object' && 'ideal' in constraints.video.facingMode && constraints.video.facingMode.ideal === 'environment'
+							? 'environment'
+							: 'user')
+						: hasRearCamera
+							? 'environment'
+							: 'user';
+					break;
+				} catch (error) {
+					lastError = error;
+				}
 			}
+
+			if (!stream) {
+				throw lastError ?? new Error('No camera stream could be opened.');
+			}
+
+			cameraOpen = true;
+			await tick();
+			const video = videoRef;
+			if (!video) {
+				throw new Error('The camera preview could not be initialized.');
+			}
+
+			video.muted = true;
+			video.playsInline = true;
+			video.srcObject = stream;
+			const videoReady = new Promise<void>((resolve, reject) => {
+				const cleanup = () => {
+					window.clearTimeout(timeout);
+					video.removeEventListener('loadeddata', onReady);
+					video.removeEventListener('error', onError);
+				};
+				const onReady = () => {
+					if (video.videoWidth > 0 && video.videoHeight > 0) {
+						cleanup();
+						resolve();
+					}
+				};
+				const onError = () => {
+					cleanup();
+					reject(new Error('The camera opened but its video could not be played.'));
+				};
+				const timeout = window.setTimeout(() => {
+					cleanup();
+					reject(new Error('Camera is active but not returning video frames.'));
+				}, 5000);
+				video.addEventListener('loadeddata', onReady);
+				video.addEventListener('error', onError);
+				onReady();
+			});
+
+			try {
+				await video.play();
+			} catch (playError) {
+				console.warn('Camera playback was blocked:', playError);
+			}
+			await videoReady;
+
+			if (video.videoWidth === 0 || video.videoHeight === 0) {
+				throw new Error('Camera is active but not returning frames. Try a different browser or device.');
+			}
+
 			message = `Scanning… using ${cameraMode === 'environment' ? 'rear' : 'front'} camera.`;
 			resultTone = 'neutral';
 			scanFrameId = requestAnimationFrame(scanLoop);
 		} catch (error) {
 			console.error(error);
-			message = 'Camera permission was denied or the device is unavailable.';
+			message = error instanceof Error && error.message
+				? error.message
+				: 'Camera permission was denied or the device is unavailable.';
 			resultTone = 'error';
 			stopCamera();
 		}
