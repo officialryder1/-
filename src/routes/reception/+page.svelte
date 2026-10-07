@@ -12,6 +12,7 @@
 	let message = $state('Waiting for a pass. Ask the member to hold their code inside the frame.');
 	let resultTone = $state<'neutral' | 'success' | 'error'>('neutral');
 	let cameraOpen = $state(false);
+	let cameraMode = $state<'environment' | 'user' | 'unknown'>('unknown');
 	let videoRef = $state<HTMLVideoElement | null>(null);
 	let stream: MediaStream | null = null;
 	let scanFrameId: number | null = null;
@@ -81,16 +82,31 @@
 
 		try {
 			stopCamera();
-			stream = await navigator.mediaDevices.getUserMedia({
-				video: { facingMode: 'environment' },
-				audio: false
-			});
+
+			const devices = await navigator.mediaDevices.enumerateDevices();
+			const hasRearCamera = devices.some((d) => d.kind === 'videoinput' && /back|rear|environment/i.test(d.label || ''));
+
+			const constraints = hasRearCamera
+				? {
+					video: {
+						facingMode: { ideal: 'environment' },
+						width: { ideal: 1280 },
+						height: { ideal: 720 }
+					},
+					audio: false
+				}
+				: { video: true, audio: false };
+
+			stream = await navigator.mediaDevices.getUserMedia(constraints);
+			cameraMode = hasRearCamera ? 'environment' : 'user';
 			cameraOpen = true;
 			if (videoRef) {
 				videoRef.srcObject = stream;
+				videoRef.muted = true;
+				videoRef.playsInline = true;
 				await videoRef.play();
 			}
-			message = 'Scanning… hold the pass inside the frame.';
+			message = `Scanning… using ${cameraMode === 'environment' ? 'rear' : 'front'} camera.`;
 			resultTone = 'neutral';
 			scanFrameId = requestAnimationFrame(scanLoop);
 		} catch (error) {
@@ -156,7 +172,10 @@
 
 		<div class="scan-stage" aria-live="polite">
 			{#if cameraOpen}
-				<video bind:this={videoRef} autoplay muted playsinline class="camera-feed"></video>
+				<div class="camera-wrap">
+					<span class="camera-label">{cameraMode === 'environment' ? 'Rear camera' : 'Front camera'}</span>
+					<video bind:this={videoRef} autoplay muted playsinline class="camera-feed"></video>
+				</div>
 			{:else}
 				<div class="reticle" aria-hidden="true">
 					<span class="corner tl"></span>
@@ -289,12 +308,27 @@
 		background: var(--color-ink-900);
 	}
 
+	.camera-wrap {
+		display: grid;
+		gap: 0.5rem;
+		justify-items: center;
+	}
+
+	.camera-label {
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--color-chalk-faint);
+	}
+
 	.camera-feed {
 		width: min(100%, 320px);
-		height: auto;
+		height: 240px;
 		display: block;
 		background: var(--color-ink-950);
 		border: 1px solid var(--color-line-strong);
+		object-fit: cover;
 	}
 
 	.reticle {
