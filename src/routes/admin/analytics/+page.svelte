@@ -120,7 +120,7 @@
 		<section class="block">
 			<h2>Recent activity</h2>
 			<ul class="feed">
-				{#each a.recentCheckIns as c (c.time + c.member)}
+				{#each a.recentCheckIns as c, idx (idx)}
 					<li>
 						<span class="tnum feed-time">{c.time}</span>
 						<span class="feed-name">{c.member}</span>
