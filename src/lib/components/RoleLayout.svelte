@@ -15,6 +15,7 @@
 			{ label: 'QR Pass', href: '/member/qr' },
 			{ label: 'Attendance', href: '/member/attendance' },
 			{ label: 'Shop', href: '/member/shop' },
+			{ label: 'Orders', href: '/member/shop/orders' },
 			{ label: 'Profile', href: '/member/profile' }
 		],
 		receptionist: [
@@ -28,6 +29,7 @@
 			{ label: 'Subscriptions', href: '/admin/subscriptions' },
 			{ label: 'Attendance', href: '/admin/attendance' },
 			{ label: 'Products', href: '/admin/products' },
+			{ label: 'Orders', href: '/admin/orders' },
 			{ label: 'Reports', href: '/admin/reports' },
 			{ label: 'Staff', href: '/admin/staff' }
 		]
