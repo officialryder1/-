@@ -12,6 +12,7 @@
 	const navByRole = {
 		member: [
 			{ label: 'Overview', href: '/member' },
+			{ label: 'Plans', href: '/member/plans' },
 			{ label: 'QR Pass', href: '/member/qr' },
 			{ label: 'Attendance', href: '/member/attendance' },
 			{ label: 'Shop', href: '/member/shop' },
@@ -26,6 +27,7 @@
 		admin: [
 			{ label: 'Overview', href: '/admin' },
 			{ label: 'Members', href: '/admin/members' },
+			{ label: 'Plans', href: '/admin/plans' },
 			{ label: 'Subscriptions', href: '/admin/subscriptions' },
 			{ label: 'Attendance', href: '/admin/attendance' },
 			{ label: 'Products', href: '/admin/products' },

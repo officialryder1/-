@@ -27,6 +27,7 @@ export default defineConfig({
 			}
 		})
 	],
+
 	test: {
 		expect: { requireAssertions: true },
 		projects: [
