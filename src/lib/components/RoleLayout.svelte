@@ -26,6 +26,7 @@
 		],
 		admin: [
 			{ label: 'Overview', href: '/admin' },
+			{ label: 'Analytics', href: '/admin/analytics' },
 			{ label: 'Members', href: '/admin/members' },
 			{ label: 'Plans', href: '/admin/plans' },
 			{ label: 'Subscriptions', href: '/admin/subscriptions' },
