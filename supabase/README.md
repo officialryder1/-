@@ -96,3 +96,42 @@ Change every demo password before sharing anything publicly.
 - RLS helpers are `SECURITY DEFINER` to avoid infinite recursion when a policy on
   `profiles` needs to read `profiles`.
 - Rotate the service-role key if it is ever exposed; it bypasses every policy here.
+
+## Security fixes — `0002_security_fixes.sql` (2026-10-10)
+
+`0001_init.sql` had **four confirmed privilege-escalation holes**. Its insert/update
+policies checked only *who* a row belonged to (`member_id = auth.uid()`), never *what
+values* were being written — and `WITH CHECK` must pin the privilege-bearing columns.
+
+| Hole | Attack | Fix |
+|---|---|---|
+| **A** | Member self-inserted an `active`+`paid` subscription → free membership | Insert policy now requires `status='pending'`, `payment_status in ('unpaid','pending')`, `payment_reference is null` |
+| **B** | Member created an order with `subtotal = 0` → free goods | Direct `INSERT` revoked; orders go through `create_order(jsonb)` RPC which prices from `products` and deducts stock with `FOR UPDATE` |
+| **C** | Member moved self to another `gym_id` → tenant escape | `protect_profile_columns()` BEFORE UPDATE trigger blocks `gym_id` changes |
+| **D** | Member flipped own `membership_status` → self-reactivate | Same trigger blocks `membership_status` / `subscription_expires_at` |
+
+The trigger (not a `WITH CHECK`) is used for C/D because it has both `OLD` and `NEW`,
+so it can compare exactly what changed — and it avoids the infinite recursion a
+self-referential `WITH CHECK` on `profiles` would cause.
+
+## Verification (no Supabase instance needed)
+
+All three scripts run against **PGlite** (Postgres compiled to WASM) and need no keys:
+
+```bash
+node scripts/validate-migration.mjs    # schema applies; constraints & rules enforced
+node scripts/verify-rls-behavior.mjs   # 14 assertions: escalation DENIED, legit use ALLOWED
+node scripts/probe-rls-holes.mjs       # adversarial: impersonate a member, report affected rows
+```
+
+`verify-rls-behavior.mjs` is the regression gate — it asserts **both** directions, because
+a policy that blocks everything is as broken as one that blocks nothing. Exit code 1 on
+any failure, so it can run in CI.
+
+> **Testing pitfall (cost an hour to find):** `SET LOCAL` does **not** survive across
+> PGlite calls — each call is its own transaction — so an impersonation probe using it
+> silently runs as the **table owner**, who bypasses RLS entirely and reports every
+> attack as "exploited". Use session-level `set role authenticated` +
+> `set_config('request.jwt.claims', …, false)`. Also: grants must run **after** the
+> migration, or `grant … on all tables` matches zero tables. Always assert the acting
+> role (`current_user`) before trusting a result.
