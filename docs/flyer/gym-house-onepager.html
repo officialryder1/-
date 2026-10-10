@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Gym House — One-Pager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#15202b; --bg2:#1c2a37; --ink:#ffffff; --muted:#9fb0c0;
+    --accent:#ff6a33; --accent2:#ffb088; --line:rgba(255,255,255,.13);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{background:#0b1219;}
+  body{font-family:'Archivo',-apple-system,'Segoe UI',Roboto,sans-serif; color:var(--ink);
+       display:flex; justify-content:center; padding:0;}
+
+  .sheet{
+    width:210mm; min-height:297mm; background:var(--bg); position:relative;
+    padding:15mm 15mm 12mm; overflow:hidden;
+    display:flex; flex-direction:column;
+  }
+  /* subtle top glow */
+  .sheet::before{
+    content:""; position:absolute; inset:0 0 auto 0; height:60mm;
+    background:radial-gradient(120% 100% at 82% -18%, rgba(255,106,51,.30), transparent 62%);
+    pointer-events:none;
+  }
+  .sheet > *{position:relative; z-index:1;}
+
+  /* ---------- masthead ---------- */
+  .mast{display:flex; align-items:center; justify-content:space-between;
+        border-bottom:1px solid var(--line); padding-bottom:7mm;}
+  .brand{display:flex; align-items:center; gap:10px;}
+  .mark{width:34px;height:34px;border-radius:9px;background:var(--accent);
+        display:flex;align-items:center;justify-content:center;
+        font-weight:900;font-size:19px;color:#15202b;letter-spacing:-1px;}
+  .word{font-weight:900;font-size:23px;letter-spacing:-.6px;line-height:1;}
+  .word span{color:var(--accent);}
+  .tag{font-size:9.5px;color:var(--muted);letter-spacing:.16em;text-transform:uppercase;
+       margin-top:3px;font-weight:600;}
+  .by{text-align:right;font-size:9.5px;color:var(--muted);letter-spacing:.1em;
+      text-transform:uppercase;font-weight:600;line-height:1.6;}
+  .by b{color:#fff;font-weight:800;}
+
+  /* ---------- hero ---------- */
+  .hero{padding:11mm 0 8mm;}
+  .kick{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9.5px;
+        letter-spacing:.2em;text-transform:uppercase;color:var(--accent);
+        border:1px solid rgba(255,106,51,.45);border-radius:100px;padding:4px 11px;
+        background:rgba(255,106,51,.09);margin-bottom:6mm;}
+  h1{font-size:38px;line-height:1.03;font-weight:900;letter-spacing:-1.4px;}
+  h1 em{font-style:normal;color:var(--accent);}
+  .sub{margin-top:5.5mm;font-size:13px;line-height:1.55;color:#cdd9e4;max-width:150mm;}
+
+  /* ---------- section ---------- */
+  .lbl{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.22em;
+       text-transform:uppercase;color:var(--muted);margin-bottom:4mm;
+       display:flex;align-items:center;gap:9px;}
+  .lbl::after{content:"";flex:1;height:1px;background:var(--line);}
+
+  ol{list-style:none;display:flex;flex-direction:column;gap:3.4mm;}
+  li{display:flex;gap:11px;align-items:flex-start;}
+  .n{flex:0 0 auto;width:20px;height:20px;border-radius:6px;
+     background:rgba(255,106,51,.14);border:1px solid rgba(255,106,51,.4);
+     color:var(--accent);font-size:11px;font-weight:800;
+     display:flex;align-items:center;justify-content:center;margin-top:1px;}
+  .it{font-size:12.3px;line-height:1.42;}
+  .it b{font-weight:800;color:#fff;}
+  .it span{color:var(--muted);font-weight:400;}
+
+  /* ---------- value strip ---------- */
+  .strip{display:grid;grid-template-columns:repeat(3,1fr);gap:0;
+         border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:8mm 0 7mm;}
+  .cell{padding:6mm 5mm;background:var(--bg2);border-right:1px solid var(--line);}
+  .cell:last-child{border-right:0;}
+  .big{font-size:24px;font-weight:900;letter-spacing:-.9px;color:var(--accent);line-height:1;}
+  .cap{margin-top:2.6mm;font-size:10px;color:var(--muted);line-height:1.4;font-weight:500;}
+
+  /* ---------- CTA ---------- */
+  .cta{margin-top:auto;display:flex;align-items:center;gap:8mm;
+       background:linear-gradient(120deg,rgba(255,106,51,.16),rgba(255,106,51,.05));
+       border:1px solid rgba(255,106,51,.35);border-radius:14px;padding:6.5mm 7mm;}
+  .qr{flex:0 0 auto;width:31mm;height:31mm;background:#fff;border-radius:9px;
+      padding:2.4mm;display:flex;align-items:center;justify-content:center;}
+  .qr img{width:100%;height:100%;display:block;}
+  .cta-txt h2{font-size:17.5px;font-weight:900;letter-spacing:-.5px;line-height:1.1;}
+  .cta-txt p{font-size:11px;color:#d7e2ec;margin-top:2.4mm;line-height:1.5;}
+  .cta-txt .scan{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;
+                 text-transform:uppercase;color:var(--accent2);margin-bottom:2.4mm;font-weight:600;}
+
+  /* ---------- footer ---------- */
+  .foot{margin-top:6mm;padding-top:4.5mm;border-top:1px solid var(--line);
+        display:flex;justify-content:space-between;align-items:center;
+        font-size:10px;color:var(--muted);}
+  .foot b{color:#fff;font-weight:700;}
+  .foot .dot{color:var(--accent);padding:0 6px;}
+
+  @media print{
+    html,body{background:#fff;}
+    body{padding:0;display:block;}
+    @page{size:A4;margin:0;}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .sheet{width:210mm;min-height:297mm;box-shadow:none;margin:0;}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="mast">
+    <div class="brand">
+      <div class="mark">G</div>
+      <div>
+        <div class="word">Gym<span>House</span></div>
+        <div class="tag">Gym management, built for Nigeria</div>
+      </div>
+    </div>
+    <div class="by">by <b>RyderTech</b><br>Abuja, Nigeria</div>
+  </div>
+
+  <div class="hero">
+    <span class="kick">For gym owners · Abuja</span>
+    <h1>Every expired member who walks in free is <em>money out of your pocket.</em></h1>
+    <p class="sub">Gym House replaces your paper register with a live system — QR check-in, automatic
+      renewal reminders, and Paystack payments. Your members check themselves in. You see everything
+      from your phone. <b style="color:#fff">Live in 2 hours.</b></p>
+  </div>
+
+  <div class="lbl">What you get</div>
+  <ol>
+    <li><span class="n">1</span><span class="it"><b>QR check-in at the door.</b>
+      <span>Every visit logged in seconds. Expired members are blocked automatically — no arguments.</span></span></li>
+    <li><span class="n">2</span><span class="it"><b>Members check in themselves.</b>
+      <span>No reception queue. No “I already paid.” The system knows who is current.</span></span></li>
+    <li><span class="n">3</span><span class="it"><b>Renewals paid online via Paystack.</b>
+      <span>Money lands in your account; access turns on instantly. No cash handling.</span></span></li>
+    <li><span class="n">4</span><span class="it"><b>See who is in the gym right now.</b>
+      <span>Live occupancy and attendance history — from any phone, no app to install.</span></span></li>
+    <li><span class="n">5</span><span class="it"><b>Know your numbers.</b>
+      <span>Revenue, peak hours, and member retention in one dashboard. Export for tax or loans.</span></span></li>
+    <li><span class="n">6</span><span class="it"><b>Every staff action recorded.</b>
+      <span>Tamper-proof audit trail — no disappearing cash, no ghost check-ins.</span></span></li>
+  </ol>
+
+  <div class="strip">
+    <div class="cell">
+      <div class="big">2 hrs</div>
+      <div class="cap">From handshake to live. We import your member list and set up your plans the same day.</div>
+    </div>
+    <div class="cell">
+      <div class="big">₦15k<span style="font-size:13px;color:var(--muted);font-weight:700">/mo</span></div>
+      <div class="cap">Less than the cost of one member who churns. First month free for Gwarinpa gyms.</div>
+    </div>
+    <div class="cell">
+      <div class="big">0 apps</div>
+      <div class="cap">Runs in the browser and works offline. Nothing for members to download.</div>
+    </div>
+  </div>
+
+  <div class="cta">
+    <div class="qr"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAMgCAYAAADbcAZoAAAAAklEQVR4AewaftIAABaQSURBVO3BwbEdthIdwMMppiCshbWQfyTYY48k6J8An12lwjxdurt//PX3P78C/3H37Lw05spr9+zwvcZceemenU825grf656dTzfmCl+7Z+elMVfgv6wCAADQpAIAANCkAgAA0KQCAADQpAIAANCkAgAA0KQCAADQpAIAANCkAgAA0KQCAADQpAIAANCkAgAA0KQCAADQpAIAANCkAgAA0KQCAADQpAIAANCkAgAA0KQCAADQpAIAANCkAgAA0KQCAADQpAIAANCkAgAA0ORnGtyzw59tzBW+15grL92z89KYK3yve3Y+3ZgrL92z8+nGXHnpnp2Xxlx56Z4dvnbPDn+2MVdeqgAAADSpAAAANKkAAAA0qQAAADSpAAAANKkAAAA0qQAAADSpAAAANKkAAAA0qQAAADSpAAAANKkAAAA0qQAAADSpAAAANKkAAAA0qQAAADSpAAAANKkAAAA0qQAAADSpAAAANKkAAAA0qQAAADSpAAAANPmZP8CYK3ztnh1+754d/nz37HyyMVdeumeHP989O5/snp2Xxlx57Z4dfm/MFb52z84nqwAAADSpAAAANKkAAAA0qQAAADSpAAAANKkAAAA0qQAAADSpAAAANKkAAAA0qQAAADSpAAAANKkAAAA0qQAAADSpAAAANKkAAAA0qQAAADSpAAAANKkAAAA0qQAAADSpAAAANKkAAAA0qQAAADSpAAAANPkZIGOuvHbPzkv37Lw05gpfG3PlpXt2Xhpz5bV7dj7ZmCuf7p6dl8ZceemeHeCzVQAAAJpUAAAAmlQAAACaVAAAAJpUAAAAmlQAAACaVAAAAJpUAAAAmlQAAACaVAAAAJpUAAAAmlQAAACaVAAAAJpUAAAAmlQAAACaVAAAAJpUAAAAmlQAAACaVAAAAJpUAAAAmlQAAACaVAAAAJpUAAAAmvwMwP+De3ZeGnPltTFXXrpnh6+NufLSPTsvjbny0j07r4258snGXHnpnh3grQoAAECTCgAAQJMKAABAkwoAAECTCgAAQJMKAABAkwoAAECTCgAAQJMKAABAkwoAAECTCgAAQJMKAABAkwoAAECTCgAAQJMKAABAkwoAAECTCgAAQJMKAABAkwoAAECTCgAAQJMK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" alt="Scan to see Gym House live"></div>
+    <div class="cta-txt">
+      <div class="scan">Scan to see it live</div>
+      <h2>Point your phone camera here.</h2>
+      <p>The demo is running now — click around as a member, as reception, and as the owner.
+         Then tell me what you would change.</p>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div><b>RyderTech</b> · rydertech.ng<span class="dot">•</span>rydertech.ng@gmail.com</div>
+    <div><b>Gym House</b> — digital memberships, QR access, payments &amp; analytics</div>
+  </div>
+
+</div>
+</body>
+</html>
