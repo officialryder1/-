@@ -3,6 +3,7 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { getOrder, updateOrderStatus } from '#lib/server/shop';
 import { getUserFromSession } from '#lib/server/mock-auth';
+import { record } from '#lib/server/audit';
 import type { OrderStatus } from '#lib/server/shop';
 
 const VALID_STATUSES: OrderStatus[] = ['pending', 'confirmed', 'ready', 'completed', 'cancelled'];
@@ -50,6 +51,14 @@ export const PATCH: RequestHandler = async ({ params, request, cookies }) => {
 	if (!order) {
 		return json({ error: 'Order not found' }, { status: 404 });
 	}
+
+	record({
+		actor: user,
+		action: 'order.status_changed',
+		entity: `order:${order.id}`,
+		summary: `Order ${order.id} set to ${status}`,
+		meta: { status, member_id: order.member_id }
+	});
 
 	return json({ order });
 };

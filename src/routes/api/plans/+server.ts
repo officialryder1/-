@@ -3,6 +3,7 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { listPlans, createPlan } from '#lib/server/plans';
 import { getUserFromSession } from '#lib/server/mock-auth';
+import { record } from '#lib/server/audit';
 
 export const GET: RequestHandler = async () => {
 	return json({ plans: listPlans() });
@@ -41,6 +42,14 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 		duration_days,
 		features: Array.isArray(features) ? features : [],
 		is_active: is_active ?? true
+	});
+
+	record({
+		actor: user,
+		action: 'plan.created',
+		entity: `plan:${plan.id}`,
+		summary: `Created plan "${plan.name}" at ₦${(plan.price / 100).toLocaleString('en-NG')}`,
+		meta: { price: plan.price, duration_days: plan.duration_days }
 	});
 
 	return json({ plan }, { status: 201 });

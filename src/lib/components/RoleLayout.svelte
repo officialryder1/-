@@ -34,6 +34,7 @@
 			{ label: 'Products', href: '/admin/products' },
 			{ label: 'Orders', href: '/admin/orders' },
 			{ label: 'Reports', href: '/admin/reports' },
+			{ label: 'Audit Log', href: '/admin/audit' },
 			{ label: 'Staff', href: '/admin/staff' }
 		]
 	} as const;

@@ -1,8 +1,9 @@
 // src/routes/api/subscriptions/[id]/+server.ts
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { cancelSubscription, updateSubscriptionStatus } from '#lib/server/plans';
+import { cancelSubscription, updateSubscriptionStatus, getPlan } from '#lib/server/plans';
 import { getUserFromSession } from '#lib/server/mock-auth';
+import { record } from '#lib/server/audit';
 import type { SubscriptionStatus } from '#lib/server/plans';
 
 const VALID_STATUSES: SubscriptionStatus[] = ['pending', 'active', 'expired', 'cancelled', 'suspended'];
@@ -27,6 +28,13 @@ export const PATCH: RequestHandler = async ({ params, request, cookies }) => {
 		if (!sub) {
 			return json({ error: 'Subscription not found' }, { status: 404 });
 		}
+		record({
+			actor: user,
+			action: 'subscription.cancelled',
+			entity: `subscription:${sub.id}`,
+			summary: `Cancelled ${getPlan(sub.plan_id)?.name ?? sub.plan_id} subscription`,
+			meta: { plan_id: sub.plan_id }
+		});
 		return json({ subscription: sub });
 	}
 
@@ -43,6 +51,21 @@ export const PATCH: RequestHandler = async ({ params, request, cookies }) => {
 	if (!sub) {
 		return json({ error: 'Subscription not found' }, { status: 404 });
 	}
+
+	record({
+		actor: user,
+		action:
+			status === 'suspended'
+				? 'subscription.suspended'
+				: status === 'active'
+					? 'subscription.reactivated'
+					: status === 'cancelled'
+						? 'subscription.cancelled'
+						: 'subscription.reactivated',
+		entity: `subscription:${sub.id}`,
+		summary: `Set ${getPlan(sub.plan_id)?.name ?? sub.plan_id} subscription to ${status}`,
+		meta: { status, member_id: sub.member_id }
+	});
 
 	return json({ subscription: sub });
 };

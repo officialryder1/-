@@ -3,7 +3,7 @@
 // Computes insights from attendance, subscription, and shop data.
 // In production this is replaced by Supabase aggregation queries.
 
-import { getAllSubscriptions, listAllPlans } from './plans';
+import { getAllSubscriptions, listAllPlans, getPlan } from './plans';
 import { listAllOrders } from './shop';
 import { mockUsers } from './mock-auth';
 
@@ -234,11 +234,21 @@ export function getAdminInsights(): AdminInsights {
 		return !lastVisit || new Date(lastVisit.date) < twoWeeksAgo;
 	}).length;
 
-	// Revenue
-	const monthlyRevenue = orders
-		.filter((o) => new Date(o.created_at) >= oneMonthAgo)
-		.reduce((sum, o) => sum + o.subtotal, 0);
-	const totalRevenue = orders.reduce((sum, o) => sum + o.subtotal, 0);
+	// Revenue = subscription payments (the gym's primary income) + shop orders.
+	// Only paid subscriptions count; pay_at_gym stays unpaid until settled.
+	const subRevenue = (since: Date | null) =>
+		subscriptions
+			.filter((s) => s.payment_status === 'paid')
+			.filter((s) => (since ? new Date(s.starts_at) >= since : true))
+			.reduce((sum, s) => sum + (getPlan(s.plan_id)?.price ?? 0), 0);
+
+	const shopRevenue = (since: Date | null) =>
+		orders
+			.filter((o) => (since ? new Date(o.created_at) >= since : true))
+			.reduce((sum, o) => sum + o.subtotal, 0);
+
+	const monthlyRevenue = subRevenue(oneMonthAgo) + shopRevenue(oneMonthAgo);
+	const totalRevenue = subRevenue(null) + shopRevenue(null);
 
 	// Visits by day (last 7 days)
 	const visitsByDay: { day: string; count: number }[] = [];

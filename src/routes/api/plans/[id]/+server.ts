@@ -3,6 +3,7 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { getPlan, updatePlan, deletePlan } from '#lib/server/plans';
 import { getUserFromSession } from '#lib/server/mock-auth';
+import { record } from '#lib/server/audit';
 
 export const GET: RequestHandler = async ({ params }) => {
 	const plan = getPlan(params.id);
@@ -47,6 +48,14 @@ export const PATCH: RequestHandler = async ({ params, request, cookies }) => {
 		return json({ error: 'Plan not found' }, { status: 404 });
 	}
 
+	record({
+		actor: user,
+		action: 'plan.updated',
+		entity: `plan:${plan.id}`,
+		summary: `Updated plan "${plan.name}"`,
+		meta: { price: plan.price, duration_days: plan.duration_days, is_active: plan.is_active }
+	});
+
 	return json({ plan });
 };
 
@@ -61,10 +70,19 @@ export const DELETE: RequestHandler = async ({ params, cookies }) => {
 		return json({ error: 'Admin access required' }, { status: 403 });
 	}
 
+	const existing = getPlan(params.id);
 	const deleted = deletePlan(params.id);
 	if (!deleted) {
 		return json({ error: 'Plan not found' }, { status: 404 });
 	}
+
+	record({
+		actor: user,
+		action: 'plan.deleted',
+		entity: `plan:${params.id}`,
+		summary: `Deleted plan "${existing?.name ?? params.id}"`,
+		meta: { price: existing?.price }
+	});
 
 	return json({ success: true });
 };

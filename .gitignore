@@ -24,3 +24,7 @@ vite.config.ts.timestamp-*
 
 .vercel
 gym-cookies.txt
+gym-admin.txt
+gym-recep.txt
+gym-m1.txt
+*.cookie.txt

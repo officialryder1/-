@@ -45,6 +45,15 @@ export const mockUsers: Record<string, GymHouseUser> = {
 		membership_status: 'expired',
 		subscription_expires_at: '2026-01-15T23:59:59Z'
 	},
+	'member-3': {
+		id: 'member-3',
+		email: 'chloe@demogym.com',
+		full_name: 'Chloe Martin',
+		role: 'member',
+		gym_id: 'gym-house-001',
+		membership_status: 'active',
+		subscription_expires_at: '2026-11-30T23:59:59Z'
+	},
 	'reception-1': {
 		id: 'reception-1',
 		email: 'reception@demogym.com',
@@ -68,6 +77,7 @@ export const mockUsers: Record<string, GymHouseUser> = {
 const mockCredentials: Record<string, { userId: string; password: string }> = {
 	'alice@demogym.com': { userId: 'member-1', password: 'member123' },
 	'bob@demogym.com': { userId: 'member-2', password: 'member123' },
+	'chloe@demogym.com': { userId: 'member-3', password: 'member123' },
 	'reception@demogym.com': { userId: 'reception-1', password: 'reception123' },
 	'admin@demogym.com': { userId: 'admin-1', password: 'admin1234' }
 };

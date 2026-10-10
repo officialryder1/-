@@ -99,10 +99,66 @@ function plansStore(): PlansStore {
 	if (!g[PLANS_KEY]) {
 		g[PLANS_KEY] = {
 			plans: seedPlans.map(p => ({ ...p })),
-			subscriptions: []
+			subscriptions: seedSubscriptions()
 		};
 	}
 	return g[PLANS_KEY]!;
+}
+
+/**
+ * Demo subscriptions so the admin views (revenue, plan mix, member status) are
+ * not empty on first load. Dates are relative to "now" so the demo never goes
+ * stale — member-1/2/3 are the three demo members from mock-auth.
+ */
+function seedSubscriptions(): Subscription[] {
+	const now = Date.now();
+	const days = (n: number) => new Date(now + n * 86_400_000).toISOString();
+	const ago = (n: number) => new Date(now - n * 86_400_000).toISOString();
+
+	return [
+		{
+			id: 'sub-101',
+			gym_id: 'gym-house-001',
+			member_id: 'member-1', // Alice — active Unlimited
+			plan_id: 'plan-3',
+			starts_at: ago(12),
+			expires_at: days(18),
+			status: 'active',
+			payment_status: 'paid',
+			payment_method: 'paystack',
+			payment_reference: 'PAY-9F2C41A7',
+			created_at: ago(12),
+			updated_at: ago(12)
+		},
+		{
+			id: 'sub-102',
+			gym_id: 'gym-house-001',
+			member_id: 'member-2', // Bob — expired Basic
+			plan_id: 'plan-1',
+			starts_at: ago(75),
+			expires_at: ago(45),
+			status: 'expired',
+			payment_status: 'paid',
+			payment_method: 'pay_at_gym',
+			payment_reference: null,
+			created_at: ago(75),
+			updated_at: ago(45)
+		},
+		{
+			id: 'sub-103',
+			gym_id: 'gym-house-001',
+			member_id: 'member-3', // Chloe — active Premium
+			plan_id: 'plan-2',
+			starts_at: ago(20),
+			expires_at: days(10),
+			status: 'active',
+			payment_status: 'paid',
+			payment_method: 'paystack',
+			payment_reference: 'PAY-1B77E0D3',
+			created_at: ago(20),
+			updated_at: ago(20)
+		}
+	];
 }
 
 // --- plan operations ---

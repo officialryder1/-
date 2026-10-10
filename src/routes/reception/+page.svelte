@@ -188,6 +188,33 @@
 		}
 	}
 
+	let scanning = $state(false);
+
+	async function commitScan(memberId: string) {
+		scanning = true;
+		try {
+			const res = await fetch('/api/attendance', {
+				method: 'POST',
+				headers: { 'content-type': 'application/json' },
+				body: JSON.stringify({ memberId, direction: mode })
+			});
+			const body = await res.json();
+			if (!res.ok) {
+				message = body.error ?? 'Could not record the door event.';
+				resultTone = 'error';
+				return;
+			}
+			const verb = mode === 'in' ? 'checked in' : 'checked out';
+			message = `${body.session.member_name} ${verb}. ${body.occupancy} on floor.`;
+			resultTone = 'success';
+		} catch {
+			message = 'Network error — the door event was not recorded.';
+			resultTone = 'error';
+		} finally {
+			scanning = false;
+		}
+	}
+
 	function handleScan() {
 		const payload = parseMemberQrPayload(scannedText.trim());
 		if (!payload) {
@@ -209,9 +236,7 @@
 			return;
 		}
 
-		const action = mode === 'in' ? 'check in' : 'check out';
-		message = `${member.name} is ready to ${action}.`;
-		resultTone = 'success';
+		commitScan(member.id);
 	}
 
 	const demoQr = 'gymhouse-member:member-1:demo-member-1-pass';
@@ -282,7 +307,7 @@
 		<section class="block">
 			<h2>Recent door events</h2>
 			<ul class="feed">
-				{#each data.recentVisits as v (v.time + v.name)}
+				{#each data.recentVisits as v, idx (idx)}
 					<li>
 						<span class="tnum feed-time">{v.time}</span>
 						<span class="feed-name">{v.name}</span>
